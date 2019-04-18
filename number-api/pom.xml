@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>com.microprofile.samples</groupId>
+    <artifactId>services</artifactId>
+    <version>1.0-SNAPSHOT</version>
+  </parent>
+
+  <artifactId>number-api</artifactId>
+  <packaging>war</packaging>
+  <name>Samples Microprofile - Services - Number API</name>
+
+  <properties>
+    <listening.port>8081</listening.port>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>javax</groupId>
+      <artifactId>javaee-api</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.eclipse.microprofile</groupId>
+      <artifactId>microprofile</artifactId>
+      <type>pom</type>
+    </dependency>
+
+    <dependency>
+      <groupId>io.opentracing</groupId>
+      <artifactId>opentracing-api</artifactId>
+      <version>0.31.0</version>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.microprofile-ext.openapi-ext</groupId>
+      <artifactId>swagger-ui</artifactId>
+      <version>1.0.1</version>
+      <scope>runtime</scope>
+    </dependency>
+
+    <dependency> <!-- note we need to upgrade geronimo opentracing to have span UI -->
+      <groupId>org.apache.geronimo</groupId>
+      <artifactId>geronimo-microprofile-reporter</artifactId>
+      <version>1.0.1</version>
+      <scope>runtime</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.webjars.bower</groupId>
+      <artifactId>chart.js</artifactId>
+      <version>2.7.3</version>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.geronimo</groupId>
+      <artifactId>geronimo-opentracing</artifactId>
+      <version>1.0.2</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.geronimo</groupId>
+      <artifactId>geronimo-opentracing-common</artifactId>
+      <version>1.0.2</version>
+      <scope>provided</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <finalName>${project.artifactId}</finalName>
+
+    <plugins>
+      <plugin>
+        <groupId>org.apache.tomee.maven</groupId>
+        <artifactId>tomee-maven-plugin</artifactId>
+        <configuration>
+          <tomeeHttpPort>${listening.port}</tomeeHttpPort>
+          <tomeeAjpPort>8109</tomeeAjpPort>
+          <tomeeShutdownPort>8105</tomeeShutdownPort>
+          <systemVariables combine.children="append">
+            <openejb.classloader.forced-load>org.apache.geronimo.microprofile.reporter.</openejb.classloader.forced-load>
+          </systemVariables>
+          <libs>
+            <lib>remove:geronimo-opentracing</lib>
+            <li>org.apache.geronimo:geronimo-opentracing-common:1.0.2</li>
+            <li>org.apache.geronimo:geronimo-opentracing:1.0.2</li>
+          </libs>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>io.fabric8</groupId>
+        <artifactId>docker-maven-plugin</artifactId>
+        <configuration>
+          <skip>false</skip>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+</project>
