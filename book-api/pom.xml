@@ -5,8 +5,8 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>com.microprofile.samples</groupId>
-        <artifactId>services</artifactId>
+        <groupId>com.conference</groupId>
+        <artifactId>microprofileconfexample</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
 
