@@ -1,0 +1,20 @@
+version: '3'
+services:
+
+  cassandra:
+    image: tomitribe/tribestream-cassandra:latest
+    container_name: tag-cassandra-demo
+    volumes:
+      - ./cassandra:/var/local/cassandra
+    environment:
+      - CASSANDRA_REPLICATION='dc1':1
+  tag:
+    image: tomitribe/tribestream-api-gateway:latest
+    container_name: tag-demo
+    environment:
+      - LICENSE=accept
+      - CASSANDRA_AUTHORITIES=cassandra:9042
+    ports:
+      - 8383:8080
+    depends_on:
+      - cassandra

@@ -10,10 +10,10 @@ import org.eclipse.microprofile.metrics.MetricUnits;
 import org.eclipse.microprofile.metrics.annotation.Counted;
 import org.eclipse.microprofile.metrics.annotation.Metered;
 import org.eclipse.microprofile.metrics.annotation.Timed;
-import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.media.Content;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
+import org.eclipse.microprofile.openapi.annotations.servers.Server;
 import org.eclipse.microprofile.opentracing.Traced;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -38,6 +38,7 @@ import static javax.ws.rs.core.Response.noContent;
 import static javax.ws.rs.core.Response.ok;
 import static javax.ws.rs.core.Response.status;
 
+@Server(url = "/book-api/rest")
 @ApplicationScoped
 @Path("books")
 @Consumes(APPLICATION_JSON)
@@ -53,15 +54,17 @@ public class BookResource {
     @Inject
     private JsonWebToken token;
 
-    @Claim(value = "username")
+    @Claim(value = "name")
     @Inject
-    private ClaimValue<String> username;
+    private ClaimValue<String> name;
+
+    @Inject
+    private BookClaims bookClaims;
 
     @GET
     @Path("/{id}")
     @Metered(name = "com.microprofile.samples.services.book.resource.BookResource.findById_meter")
     @Timed(name = "com.microprofile.samples.services.book.resource.BookResource.findById_timer")
-    @Operation(summary = "Find a Book by Id")
     @APIResponse(responseCode = "200", content = {@Content(schema = @Schema(implementation = Book.class))})
     public Response findById(@PathParam("id") final Long id) {
         return bookBean.findById(id)
@@ -116,6 +119,6 @@ public class BookResource {
     @GET
     @Path("generate")
     public Response generate(final @Context HttpHeaders httpHeaders) {
-        return Response.ok(numberService.getNumber()).build();
+        return ok(numberService.getNumber()).build();
     }
 }

@@ -47,7 +47,6 @@ public class NumberService {
     @Fallback(NumberFallbackHandler.class)
     public String getNumber() {
         final Response response = numberApi.request().get();
-//        final Response response = numberResourceClient.generate();
 
         if (OK.getStatusCode() == response.getStatus()) {
             return response.readEntity(String.class);

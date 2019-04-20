@@ -17,10 +17,12 @@
 package com.microprofile.samples.services.book.config;
 
 import org.eclipse.microprofile.auth.LoginConfig;
+import org.eclipse.microprofile.openapi.annotations.servers.Server;
 
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;
 
+@Server(url = "/book-api/rest")
 @ApplicationPath("/rest")
 @LoginConfig(authMethod = "MP-JWT")
 public class ApplicationConfig extends Application {
