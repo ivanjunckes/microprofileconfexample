@@ -10,10 +10,12 @@ import org.eclipse.microprofile.metrics.MetricUnits;
 import org.eclipse.microprofile.metrics.annotation.Counted;
 import org.eclipse.microprofile.metrics.annotation.Metered;
 import org.eclipse.microprofile.metrics.annotation.Timed;
+import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.media.Content;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.servers.Server;
+import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 import org.eclipse.microprofile.opentracing.Traced;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -44,6 +46,7 @@ import static javax.ws.rs.core.Response.status;
 @Consumes(APPLICATION_JSON)
 @Produces(APPLICATION_JSON)
 @Traced
+@Tag(name = "Book Resource", description = "Manages Books.")
 public class BookResource {
     @Inject
     private BookBean bookBean;
@@ -61,6 +64,7 @@ public class BookResource {
     @Inject
     private BookClaims bookClaims;
 
+    @Operation(summary = "Find a Book by Id")
     @GET
     @Path("/{id}")
     @Metered(name = "com.microprofile.samples.services.book.resource.BookResource.findById_meter")
